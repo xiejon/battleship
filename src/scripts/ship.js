@@ -1,25 +1,31 @@
 const Ship = (len) => {
     const length = len;
-    let hitLoc = initializeHitLocs(len);
+    let hitGrid = initializeHitGrid(len);
     let sunk = false;
 
     return {
         length,
-        hitLoc,
+        hitGrid,
         sunk, 
 
         hit(num) {
-            this.hitLoc[`${num}`] = true;
+            this.hitGrid[`${num}`] = true;
+        },
+        isSunk(len) {
+            for (let i = 0; i < len; i++) {
+                if (this.hitGrid[`${i}`] === false) return;
+            }
+            this.sunk = true;
         }
     }
 }
 
-function initializeHitLocs(length) {
-    let locs = [{}];
+function initializeHitGrid(length) {
+    let grid = [{}];
     for (let i = 0; i < length; i++) {
-        locs[`${i}`] = false;
+        grid[`${i}`] = false;
     }
-    return locs;
+    return grid;
 }
 
 module.exports = {
