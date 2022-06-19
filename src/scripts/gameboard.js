@@ -6,8 +6,9 @@ import { Ship } from "./ship.js";
 // 1 = ship hit
 
 const Gameboard = () => {
-    let landscape = true;
     const grid = createGrid(10);
+    let landscape = true;
+    let fleetSunk = false;
 
     const carrier = Ship(5);
     const battleship = Ship(4);
@@ -18,6 +19,8 @@ const Gameboard = () => {
     return {
         grid,
         landscape,
+        fleetSunk,
+
         carrier,
         battleship,
         destroyer,
@@ -47,7 +50,15 @@ const Gameboard = () => {
             ship.isSunk();
         },
         checkFleet() {
-            if (this.carrier.sunk === true);
+            if (
+                this.carrier.sunk === true
+                && this.battleship.sunk === true
+                && this.destroyer.sunk === true
+                && this.submarine.sunk === true
+                && this.patrol.sunk === true
+                ) {
+                    this.fleetSunk = true;
+                }
         }
     }
 }

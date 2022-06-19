@@ -34,10 +34,10 @@ describe('places ship correctly', () => {
     });
 });
 
-describe('ship correctly receives attack', () => {
+describe('board correctly receives attacks', () => {
     const board = Gameboard();
 
-    test('starting at x-position 0', () => {
+    test('ship at x-position 0', () => {
         board.placeShip(board.carrier, 0, 5);
         board.receiveAttack(0, 5);
         board.receiveAttack(4, 5);  
@@ -45,26 +45,36 @@ describe('ship correctly receives attack', () => {
         expect(board.carrier.hits).toBe(2);
     });
 
-    test('starting at another position', () => {
+    test('ship at another position', () => {
         board.placeShip(board.patrol, 1, 5);
         board.receiveAttack(1, 5);
         board.receiveAttack(2, 5);  
     
         expect(board.patrol.hits).toBe(2);
     });
+
+    test('registers missed attack', () => {
+        board.placeShip(board.carrier, 5, 5);
+        board.receiveAttack(5, 4);
+        expect(board.grid[5][4]).toBe(-1);
+    });
+
+    test('ship sinks after enough attacks', () => {
+        board.placeShip(board.patrol, 1, 1);
+        board.receiveAttack(1, 1);
+        board.receiveAttack(2, 1);
+        expect(board.patrol.sunk).toBe(true);
+    });
+
 });
 
-test('ship sinks after enough attacks', () => {
+test('register if entire fleet is sunk', () => {
     const board = Gameboard();
-    board.placeShip(board.patrol, 1, 1);
-    board.receiveAttack(1, 1);
-    board.receiveAttack(2, 1);
-    expect(board.patrol.sunk).toBe(true);
-});
-
-test('missed attack is registered', () => {
-    const board = Gameboard();
-    board.placeShip(board.carrier, 0, 5);
-    board.receiveAttack(0, 4);
-    expect(board.grid[0][4]).toBe(-1);
-});
+    board.carrier.sunk = true;
+    board.battleship.sunk = true;
+    board.destroyer.sunk = true;
+    board.submarine.sunk = true;
+    board.patrol.sunk = true;
+    board.checkFleet();
+    expect(board.fleetSunk).toBe(true);
+})
