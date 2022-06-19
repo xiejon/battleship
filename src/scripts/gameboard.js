@@ -27,16 +27,15 @@ const Gameboard = () => {
         placeShip(ship, x, y) {
             if (this.landscape === true) {
                 for (let i = 0; i < ship.length; i++) {
-                    this.grid[i][y] = ship;
+                    this.grid[x + i][y] = ship;
                 }
             } else {
                 for (let i = 0; i < ship.length; i++) {
-                    this.grid[x][i] = ship;
+                    this.grid[x][y + i] = ship;
                 }
             }
         },
         receiveAttack(x, y) {
-            // const coords = this.grid[x][y];
             if (this.grid[x][y] === -1) return;
             if (this.grid[x][y] === '') {
                 this.grid[x][y] = -1;
@@ -45,6 +44,10 @@ const Gameboard = () => {
             
             const ship = this.grid[x][y];
             ship.hit();
+            ship.isSunk();
+        },
+        checkFleet() {
+            if (this.carrier.sunk === true);
         }
     }
 }
