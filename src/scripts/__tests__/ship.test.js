@@ -23,7 +23,7 @@ test('hit() sets hitGrid index to true', () => {
     expect(newShip).toMatchObject(expected);
 });
 
-test('isSunk() checks if all hitGrid indexes are true', () => {
+test('isSunk() sets sunk to true if all hitGrid indexes are true', () => {
     const newShip = Ship(3);
     newShip.hit(0);
     newShip.hit(1);
