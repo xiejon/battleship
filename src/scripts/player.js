@@ -1,8 +1,7 @@
 import { Gameboard } from './gameboard.js';
 
 class Player {
-    constructor(name) {
-        this.name = name;
+    constructor() {
         this.board = Gameboard();
         this.turn = false;
     }
@@ -22,9 +21,24 @@ class Player {
 }
 
 class ComputerPlayer extends Player {
-    constructor(name) {
-        super(name);
+    constructor() {
+        super();
     }
+    randomAttack(enemyPlayer) {
+        // check if given move is legal 
+
+       
+    }
+    getRandomCoords() {
+        const x = getRandomInt(0, 9);
+        const y = getRandomInt(0, 9);
+
+        return [x, y];
+    }
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 
