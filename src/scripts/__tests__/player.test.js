@@ -24,15 +24,36 @@ test('enemy board receives attack', () => {
     expect(computer.board.grid[3][4]).toBe(-1);
 })
 
-test('gets random grid coordinate', () => {
+describe('gets random grid coordinates', () => {
     const computer = new ComputerPlayer();
 
-    const coords = computer.getRandomCoords();
-    expect(coords[0]).toBeGreaterThanOrEqual(0);
-    expect(coords[0]).toBeLessThanOrEqual(9);
-    expect(coords[1]).toBeGreaterThanOrEqual(0);
-    expect(coords[1]).toBeLessThanOrEqual(9);
-})
+    test('gets coords between 0-9', () => {
+        const coords = computer.getRandomCoords();
+        expect(coords[0]).toBeGreaterThanOrEqual(0);
+        expect(coords[0]).toBeLessThanOrEqual(9);
+        expect(coords[1]).toBeGreaterThanOrEqual(0);
+        expect(coords[1]).toBeLessThanOrEqual(9);
+    });
+
+    test('gets new coords if coords attacked before', () => {
+        jest.spyOn(computer, 'getRandomInt')
+            .mockReturnValueOnce(3)
+            .mockReturnValueOnce(3)
+            .mockReturnValueOnce(4)
+            .mockReturnValueOnce(4)
+            .mockReturnValueOnce(5)
+            .mockReturnValueOnce(5);
+
+        computer.attackedCoords = {'33': 0, '44': 0};
+
+        const expected = [5, 5];
+
+        expect(computer.getRandomCoords()).not.toBe([3, 3])
+        expect(computer.getRandomCoords()).not.toBe([4, 4])
+        expect(computer.getRandomCoords()).toMatchObject(expected);
+    });
+
+});
 
 describe('randomAttack()', () => {
     const player = new Player();
@@ -54,5 +75,13 @@ describe('randomAttack()', () => {
         expect(player.board.grid[5][5]).toBe('');
         computer.randomAttack(player);
         expect(player.board.grid[5][5]).toBe(-1);
-    })
+    });
+
+    test('hash table contains attacked coordinates', () => {
+        computer.randomAttack(player);
+        const expected = {'55': 0};
+        expect(computer.attackedCoords).toMatchObject(expected);
+    });
+
+
 });
