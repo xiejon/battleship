@@ -41,7 +41,6 @@ describe('board correctly receives attacks', () => {
         board.placeShip(board.carrier, 0, 5);
         board.receiveAttack(0, 5);
         board.receiveAttack(4, 5);  
-    
         expect(board.carrier.hits).toBe(2);
     });
 
@@ -49,7 +48,6 @@ describe('board correctly receives attacks', () => {
         board.placeShip(board.patrol, 1, 5);
         board.receiveAttack(1, 5);
         board.receiveAttack(2, 5);  
-    
         expect(board.patrol.hits).toBe(2);
     });
 

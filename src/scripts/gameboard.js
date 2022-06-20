@@ -40,10 +40,7 @@ const Gameboard = () => {
         },
         receiveAttack(x, y) {
             if (this.grid[x][y] === -1) return;
-            if (this.grid[x][y] === '') {
-                this.grid[x][y] = -1;
-                return;
-            }
+            if (this.grid[x][y] === '') return this.grid[x][y] = -1;
             
             const ship = this.grid[x][y];
             ship.hit();

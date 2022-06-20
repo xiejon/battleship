@@ -8,7 +8,7 @@ const Ship = (len) => {
         hits,
         sunk,
         hit() {
-            this.hits++
+            this.hits++;
         },
         isSunk() {
             if (this.hits >= this.length) this.sunk = true;
