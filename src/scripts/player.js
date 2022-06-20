@@ -25,16 +25,15 @@ class ComputerPlayer extends Player {
         super();
     }
     randomAttack(enemyPlayer) {
-        const enemyBoard = enemyPlayer.board.grid;
-        const randomCoords = this.getRandomCoords();
-        const x = randomCoords[0];
-        const y = randomCoords[1];
+        const enemyBoard = enemyPlayer.board;
+        const coords = this.getRandomCoords();
+        const x = coords[0];
+        const y = coords[1];
 
         // Check if move is legal
-        if (enemyBoard[x][y] === -1) {
-            throw new Error('Invalid set of coordinates.');
-        }
-
+        if (enemyBoard.grid[x][y] === -1) throw new Error('Error: Invalid set of coordinates.');
+        
+        enemyBoard.receiveAttack(x, y);
     }
     getRandomCoords() {
         const x = getRandomInt(0, 9);

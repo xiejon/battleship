@@ -39,9 +39,12 @@ const Gameboard = () => {
             }
         },
         receiveAttack(x, y) {
+            // If box was previously attacked
             if (this.grid[x][y] === -1) return;
+            // If box is empty
             if (this.grid[x][y] === '') return this.grid[x][y] = -1;
             
+            // Otherwise, ship is present 
             const ship = this.grid[x][y];
             ship.hit();
             ship.isSunk();

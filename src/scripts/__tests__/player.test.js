@@ -37,10 +37,22 @@ test('gets random grid coordinate', () => {
 describe('randomAttack()', () => {
     const player = new Player();
     const computer = new ComputerPlayer();
+
     jest.spyOn(computer, 'getRandomCoords').mockReturnValue([5, 5]);
+
+    afterEach(() => {
+        // Reset tested coordinates
+        player.board.grid[5][5] = '';
+    });
 
     test('checks if move is legal', () => {
         player.board.grid[5][5] = -1;
         expect(() => computer.randomAttack(player)).toThrow(Error);
+    })
+
+    test('registers attacked coordinate', () => {
+        expect(player.board.grid[5][5]).toBe('');
+        computer.randomAttack(player);
+        expect(player.board.grid[5][5]).toBe(-1);
     })
 });
