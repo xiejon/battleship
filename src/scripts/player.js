@@ -4,22 +4,26 @@ class Player {
     constructor(name) {
         this.name = name;
         this.board = Gameboard();
-        this.isTurn = false;
+        this.turn = false;
     }
-    test() {
-        return 'test';
+    setTurn() {
+        this.turn = true;
     }
-    changeTurn() {
-        this.turn
+    disableTurn() {
+        this.turn = false;
+    }
+    attack(enemyPlayer, x, y) {
+        if (this.turn) {
+            enemyPlayer.board.receiveAttack(x, y);
+        }
+        this.disableTurn();
+        enemyPlayer.setTurn();
     }
 }
 
 class ComputerPlayer extends Player {
     constructor(name) {
         super(name);
-    }
-    do() {
-        return 'yes';
     }
 }
 
