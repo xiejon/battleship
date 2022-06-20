@@ -47,9 +47,6 @@ describe('gets random grid coordinates', () => {
         computer.attackedCoords = {'33': 0, '44': 0};
 
         const expected = [5, 5];
-
-        expect(computer.getRandomCoords()).not.toBe([3, 3])
-        expect(computer.getRandomCoords()).not.toBe([4, 4])
         expect(computer.getRandomCoords()).toMatchObject(expected);
     });
 
@@ -65,11 +62,6 @@ describe('randomAttack()', () => {
         // Reset tested coordinates
         player.board.grid[5][5] = '';
     });
-
-    test('checks if move is legal', () => {
-        player.board.grid[5][5] = -1;
-        expect(() => computer.randomAttack(player)).toThrow(Error);
-    })
 
     test('registers attacked coordinate', () => {
         expect(player.board.grid[5][5]).toBe('');
