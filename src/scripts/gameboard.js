@@ -50,7 +50,7 @@ const Gameboard = () => {
             // Otherwise, ship is present 
             const ship = this.grid[x][y];
             ship.hit();
-            ship.isSunk();
+            ship.isSunk();       
         },
         checkFleet() {
             if (
