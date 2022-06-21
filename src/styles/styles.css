@@ -30,6 +30,13 @@
     border: 1px solid orange;
 }
 
+.player-grid div, 
+.computer-grid div {
+    height: 5px; 
+    width: 5px; 
+    border: 1px solid black;
+}
+
 .footer {
     height: 10%;
     border: 1px solid blue;

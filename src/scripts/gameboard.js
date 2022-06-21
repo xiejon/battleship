@@ -9,6 +9,7 @@ const Gameboard = () => {
     const grid = createGrid(10);
     let landscape = true;
     let fleetSunk = false;
+    let isReady = false;
 
     const carrier = Ship(5);
     const battleship = Ship(4);
@@ -20,6 +21,7 @@ const Gameboard = () => {
         grid,
         landscape,
         fleetSunk,
+        isReady,
 
         carrier,
         battleship,
@@ -31,10 +33,12 @@ const Gameboard = () => {
             if (this.landscape === true) {
                 for (let i = 0; i < ship.length; i++) {
                     this.grid[x + i][y] = ship;
+                    ship.placed = true;
                 }
             } else {
                 for (let i = 0; i < ship.length; i++) {
                     this.grid[x][y + i] = ship;
+                    ship.placed = true;
                 }
             }
         },
@@ -59,6 +63,19 @@ const Gameboard = () => {
                 ) {
                     this.fleetSunk = true;
                 }
+        },
+        checkIfReady() {
+            if (
+                this.carrier.placed === false
+                || this.battleship.placed === false
+                || this.destroyer.placed === false
+                || this.submarine.placed === false
+                || this.patrol.placed === false
+                ) {
+                    this.isReady = false;
+                } else {
+                    this.isReady = true;
+                }
         }
     }
 }
@@ -74,6 +91,4 @@ function createGrid(num) {
     return grid;
 }
 
-module.exports = {
-    Gameboard
-}
+export { Gameboard };

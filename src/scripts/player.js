@@ -57,9 +57,4 @@ class ComputerPlayer extends Player {
     }
 }
 
-
-
-module.exports = {
-    Player,
-    ComputerPlayer
-}
+export { Player, ComputerPlayer };
