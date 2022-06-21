@@ -19,8 +19,8 @@ class Player {
         if (enemyPlayer.board.grid[x][y] === -1) throw new Error('Error: Invalid set of coordinates.');
         if (this.turn) {
             enemyPlayer.board.receiveAttack(x, y);
+            this.swapTurns(enemyPlayer);
         }
-        this.swapTurns(enemyPlayer);
     }
 }
 
@@ -44,7 +44,7 @@ class ComputerPlayer extends Player {
         let x = this.getRandomInt(0, 9);
         let y = this.getRandomInt(0, 9);
 
-        // If attacked before, choose new coords
+        // Check hash table for coords. If attacked before, choose new coords
         while (this.attackedCoords[`${x}${y}`] !== undefined) {
             x = this.getRandomInt(0, 9);
             y = this.getRandomInt(0, 9);
