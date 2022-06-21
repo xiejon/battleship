@@ -1,8 +1,6 @@
 import { Player, ComputerPlayer } from './player.js';
 import { renderBoards, getCoords, getBox, renderHitOrMiss, renderShips, tempRenderCompShips } from './dom.js';
 
-
-
 const Game = () => {
     const user = new Player();
     const computer = new ComputerPlayer();
@@ -33,7 +31,10 @@ const Game = () => {
                     if (!user.turn || e.target.getAttribute('clicked') === 'true') return;
 
                     this.userAttack(box, e, user, computer);
+                    this.checkWinner();
+
                     this.computerAttack(computer, user);
+                    this.checkWinner();
                 
                     // Prevent square from being clicked twice
                     e.target.setAttribute('clicked', 'true');
@@ -55,8 +56,18 @@ const Game = () => {
             const y = coords[1];
 
             const box = getBox(x, y);
-            
+
             renderHitOrMiss(box, enemy, x, y);
+        },
+        checkWinner() {
+            user.board.checkFleet();
+            computer.board.checkFleet();
+
+            if (computer.board.fleetSunk) {
+                alert('You Win!');
+            } else if (user.board.fleetSunk) {
+                alert('You Lose!')
+            }
         },
 
         // Temporary
