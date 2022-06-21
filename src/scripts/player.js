@@ -39,6 +39,8 @@ class ComputerPlayer extends Player {
         this.attackedCoords[`${x}${y}`] = 0;
 
         this.swapTurns(enemyPlayer);
+
+        return coords;
     }
     getRandomCoords() {
         let x = this.getRandomInt(0, 9);
