@@ -2,7 +2,6 @@ import { Ship } from "./ship.js";
 
 // '' = empty square
 // -1 = missed attack
-// 0 = ship present
 // 1 = ship hit
 
 const Gameboard = () => {

@@ -9,7 +9,7 @@ const Dom = () => {
         },
         createBoxes(grid, parent) {
             for (let col = 0; col < grid.length; col++) {
-                // Create columns to insert boxes into (for correct styling)
+                // Create columns to insert boxes into (to help with positioning)
                 const column = document.createElement('div');
 
                 column.classList.add(`column`);
@@ -21,7 +21,7 @@ const Dom = () => {
                     const box = document.createElement('div');
 
                     box.classList.add('box');
-                    box.setAttribute('id', `${col}`+ `${row}`);
+                    box.setAttribute('data-id', `${col}`+ `${row}`);
 
                     // temporary
                     box.textContent = `${col}`+ `${row}`
@@ -29,16 +29,18 @@ const Dom = () => {
                     column.appendChild(box);
                 }
             }
-        },
-        sortBoxes(boxes) {
-            for (let i = 0; i < 10; i++) {
-                const column = document.createElement('div');
-                column.classList.add(`column${i}`);
-            }
-            for (let i = 0; i < boxes.length; i++) {
-
+        }, 
+        renderShips(grid) {
+            for (let x = 0; x < grid.length; x++) {
+                for (let y = 0; y < grid.length; y++) {
+                    if (grid[x][y] !== '' && grid[x][y] !== -1) {
+                        const box = document.querySelector(`[data-id="${x}${y}"]`);
+                        box.style.backgroundColor = 'blue';
+                    }
+                }
             }
         }
+
     }    
 }
 
