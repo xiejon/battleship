@@ -28,12 +28,28 @@
 .computer {
     width: 50%;
     border: 1px solid orange;
+    position: relative;
+}
+
+/* get columns lined up */
+.player-grid, 
+.computer-grid {
+    display: flex;
+    position: absolute;
+    bottom: 20%;
+    left: 25%
+}
+
+/* get boxes within column correctly positioned */
+.column {
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .player-grid div, 
 .computer-grid div {
-    height: 5px; 
-    width: 5px; 
+    height: 20px; 
+    width: 20px; 
     border: 1px solid black;
 }
 
