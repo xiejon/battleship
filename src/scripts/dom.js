@@ -17,11 +17,6 @@ function getCoords(e) {
     return [x, y];
 }
 
-function renderComputerAttack(computer, user) {
-    const coords = computer.randomAttack(user);
-    console.log(coords);
-}
-
 function createBoxes(player, container) {
     for (let x = 0; x < player.board.grid.length; x++) {
         // Create columns to insert boxes into (to help with positioning)
@@ -42,13 +37,19 @@ function createBoxes(player, container) {
     }
 } 
 
-function renderHit(box) {
-    box.style.backgroundColor = '';
+function renderHitOrMiss(box, enemy, x, y) {
+    if (enemy.board.grid[x][y] === -1) {
+        // Missed shot
+        box.style.backgroundColor = 'gray';
+    } else {
+        // Hit ship
+        box.style.backgroundColor = '';
+    }
 }
 
-function renderMiss(box) {
-    box.style.backgroundColor = 'gray';
-} 
+function getBox(x, y) {
+   return document.querySelector(`[data-id="${x}${y}"]`);
+}
 
 function renderShips(player) {
     const grid = player.board.grid;
@@ -76,4 +77,4 @@ function tempRenderCompShips(grid) {
   
 
 
-export { renderBoards, getCoords, renderHit, renderMiss, renderShips, tempRenderCompShips };
+export { renderBoards, getCoords, getBox, renderHitOrMiss, renderShips, tempRenderCompShips };

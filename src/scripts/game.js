@@ -1,5 +1,5 @@
 import { Player, ComputerPlayer } from './player.js';
-import { renderBoards, getCoords, renderHit, renderMiss, renderShips, tempRenderCompShips } from './dom.js';
+import { renderBoards, getCoords, getBox, renderHitOrMiss, renderShips, tempRenderCompShips } from './dom.js';
 
 
 
@@ -22,37 +22,43 @@ const Game = () => {
             // temp
             tempRenderCompShips(computer.board.grid);
 
-
-
+            this.activateBoard();
+        },
+        activateBoard() {
             // Add event listeners on computer gameboard to register user attacks
             const computerBoard = document.querySelectorAll('.computer .box');
-    
+                
             for (let box of computerBoard) {
                 box.addEventListener('click', e => {
                     if (!user.turn || e.target.getAttribute('clicked') === 'true') return;
 
-                    const coords = getCoords(e);
-                    const x = coords[0];
-                    const y = coords[1];
-
-                    user.attack(computer, x, y);
-
-                    if (computer.board.grid[x][y] === -1) {
-                        // Missed shot
-                        renderMiss(box);
-                    } else {
-                        // Hit ship
-                        renderHit(box);
-                    }
-
-                    renderAttack(e, box, user, computer);
-                    renderComputerAttack(computer, user);
-
+                    this.userAttack(box, e, user, computer);
+                    this.computerAttack(computer, user);
+                
                     // Prevent square from being clicked twice
                     e.target.setAttribute('clicked', 'true');
                 });
             }
         },
+        userAttack(box, e, user, enemy) {
+            // Get coordinates of chosen attack site
+            const coords = getCoords(e);
+            const x = coords[0];
+            const y = coords[1];
+
+            user.attack(enemy, x, y);
+            renderHitOrMiss(box, enemy, x, y);
+        },
+        computerAttack(computer, enemy) {
+            const coords = computer.randomAttack(enemy);
+            const x = coords[0];
+            const y = coords[1];
+
+            const box = getBox(x, y);
+            
+            renderHitOrMiss(box, enemy, x, y);
+        },
+
         // Temporary
         positionShips(player) {
             player.board.placeShip(player.board.carrier, 1, 0);
