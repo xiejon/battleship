@@ -31,10 +31,7 @@ const Game = () => {
                     if (!user.turn || e.target.getAttribute('clicked') === 'true') return;
 
                     this.userAttack(box, e, user, computer);
-                    this.checkWinner();
-
                     this.computerAttack(computer, user);
-                    this.checkWinner();
                 
                     // Prevent square from being clicked twice
                     e.target.setAttribute('clicked', 'true');
@@ -49,6 +46,8 @@ const Game = () => {
 
             user.attack(enemy, x, y);
             renderHitOrMiss(box, enemy, x, y);
+
+            this.checkWinner();
         },
         computerAttack(computer, enemy) {
             const coords = computer.randomAttack(enemy);
@@ -58,6 +57,8 @@ const Game = () => {
             const box = getBox(x, y);
 
             renderHitOrMiss(box, enemy, x, y);
+
+            this.checkWinner();
         },
         checkWinner() {
             user.board.checkFleet();
@@ -65,8 +66,10 @@ const Game = () => {
 
             if (computer.board.fleetSunk) {
                 alert('You Win!');
+                resetGame();
             } else if (user.board.fleetSunk) {
                 alert('You Lose!')
+                resetGame();
             }
         },
 
@@ -83,5 +86,19 @@ const Game = () => {
     }
 }
 
+function resetGame() {
+    const columns = document.querySelectorAll('.column');
+    const boxes = document.querySelectorAll('.box');
+
+    for (let box of boxes) {
+        box.remove();
+    }
+    for (let column of columns) {
+        column.remove();
+    }
+    
+    const newGame = Game();
+    newGame.startGame();
+}
 
 export { Game };
