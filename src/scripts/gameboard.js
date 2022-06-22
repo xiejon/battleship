@@ -30,11 +30,13 @@ const Gameboard = () => {
 
         placeShip(ship, x, y) {
             if (this.landscape === true) {
+                if (x + ship.length > 9) return false;
                 for (let i = 0; i < ship.length; i++) {
                     this.grid[x + i][y] = ship;
                     ship.placed = true;
                 }
             } else {
+                if (y + ship.length > 9) return false;
                 for (let i = 0; i < ship.length; i++) {
                     this.grid[x][y + i] = ship;
                     ship.placed = true;

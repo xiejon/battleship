@@ -1,5 +1,5 @@
 import { Player, ComputerPlayer } from './player.js';
-import { renderBoards, getCoords, getBox, renderHitOrMiss, renderShips, tempRenderCompShips, renderPopup } from './dom.js';
+import { renderBoards, renderShips, renderPopup } from './dom.js';
 
 const Game = () => {
     const user = new Player();
@@ -10,42 +10,29 @@ const Game = () => {
 
             renderBoards(user, computer);
 
-            // temp
-            this.positionShips(user);
-            this.positionShips(computer);
+            // // temp
+            // this.positionShips(user);
+            // this.positionShips(computer);
 
             renderShips(user);
 
-            // temp
-            tempRenderCompShips(computer.board.grid);
+            // // temp
+            // tempRenderCompShips(computer.board.grid);
 
         },
-    
-        checkWinner() {
-            user.board.checkFleet();
-            computer.board.checkFleet();
-
-            if (computer.board.fleetSunk) {
-                alert('You Win!');
-                resetGame();
-            } else if (user.board.fleetSunk) {
-                alert('You Lose!')
-                resetGame();
-            }
-        },
 
 
 
-        // Temporary
-        positionShips(player) {
-            player.board.placeShip(player.board.carrier, 1, 0);
-            player.board.placeShip(player.board.battleship, 3, 3);
-            player.board.placeShip(player.board.destroyer, 5, 5);
-            player.board.placeShip(player.board.submarine, 6, 9);
-            player.board.placeShip(player.board.patrol, 3, 8);
+        // // Temporary
+        // positionShips(player) {
+        //     player.board.placeShip(player.board.carrier, 1, 0);
+        //     player.board.placeShip(player.board.battleship, 3, 3);
+        //     player.board.placeShip(player.board.destroyer, 5, 5);
+        //     player.board.placeShip(player.board.submarine, 6, 9);
+        //     player.board.placeShip(player.board.patrol, 3, 8);
 
-            player.board.checkIfReady();
-        }
+        //     player.board.checkIfReady();
+        // }
     }
 }
 

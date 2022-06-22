@@ -1,6 +1,23 @@
+@font-face {
+    font-family: Noto-Sans;
+    src: url(./fonts/Noto_Sans/NotoSans-Regular.ttf);
+    weight: 600;
+}
+@font-face {
+    font-family: Noto-Sans;
+    src: url(./fonts/Noto_Sans/NotoSans-Medium.ttf);
+    weight: 700;
+}
+@font-face {
+    font-family: Noto-Sans;
+    src: url(./fonts/Noto_Sans/NotoSans-Bold.ttf);
+    weight: 800;
+}
+
 * {
     margin: 0;
     padding: 0;
+    font-family: "Noto-Sans";
 }
 
 .container {
@@ -24,32 +41,63 @@
     border: 1px solid green;
 }
 
+/* Initial popup before game start */
+.background {
+    height: 100vh;
+    width: 100vw;
+    position:absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    opacity: 0.4;
+}
 .popup {
-    border: 1px solid black;
+    height: 700px;
+    min-width: 500px;
+    width: 50%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     position: absolute;
-    bottom: 500px;
+    left: 25%;
+    top: 10%;
+    background-color: white;
+    z-index: 999;
+    border-radius: 10px;
 }
-
+h2 {
+    font-size:30px;
+}
+.popup-header {
+    display: flex;
+    flex-direction: column;
+}
 .popup-grid {
     display: flex;
+}
+.popup-header img {
+    height: 40px;
 }
 
 .player, 
 .computer {
     width: 50%;
     border: 1px solid orange;
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* get columns lined up */
 .player-grid, 
 .computer-grid {
+    height: 400px;
+    width: 400px;
     display: flex;
-    position: absolute;
-    bottom: 20%;
-    left: 25%
+    align-items: center;
+    justify-content: center;
 }
 
 /* get boxes within column correctly positioned */
@@ -58,11 +106,11 @@
     flex-direction: column-reverse;
 }
 
-.popup-grid div,
-.player-grid div, 
-.computer-grid div {
-    height: 20px; 
-    width: 20px; 
+.popup-grid .box,
+.player-grid .box, 
+.computer-grid .box {
+    height: 40px; 
+    width: 40px; 
     border: 1px solid black;
 }
 

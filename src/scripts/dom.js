@@ -2,21 +2,11 @@ import { Player, ComputerPlayer } from './player.js';
 import RotateIcon from '../styles/images/rotate.svg';
 
 function renderBoards(user, computer) {
-
-    const popup = () => {
-        const popupHeader = document.querySelector('.popup-header');
-        const selectionGrid = document.querySelector('.popup-grid');
-
-        const rotateIcon = new Image();
-        rotateIcon.src = RotateIcon;
-        popupHeader.append(rotateIcon);
-
-        createGrid(user, selectionGrid);
-    }
+    const userGrid = document.querySelector('.player-grid');
+    const computerGrid = document.querySelector('.computer-grid');
 
     const boardListeners = () => {
         const computerBoard = document.querySelectorAll('.computer .box');
-        
         for (let box of computerBoard) {
             box.addEventListener('click', e => {
                 if (!user.turn || e.target.getAttribute('clicked') === 'true') return;
@@ -31,14 +21,73 @@ function renderBoards(user, computer) {
         }
     }
 
-    popup();
-
-    const userGrid = document.querySelector('.player-grid');
-    const computerGrid = document.querySelector('.computer-grid');
-
+    displayPopup(user);
     createGrid(computer, computerGrid);
-
     boardListeners();
+}
+
+function displayPopup(user) {
+    const popupHeader = document.querySelector('.popup-header');
+    const selectionGrid = document.querySelector('.popup-grid');
+
+    // Button to rotate ship
+    const rotateIcon = new Image();
+    rotateIcon.src = RotateIcon;
+    popupHeader.append(rotateIcon);
+    rotateIcon.addEventListener('click', () => {
+        if (user.board.landscape) {
+            user.board.landscape = false;
+        } else {
+            user.board.landscape = true;
+        }
+    })
+
+    // Grid to place ships
+    createGrid(user, selectionGrid);
+
+    const popupListeners = () => {
+        const selectionBoard = document.querySelectorAll('.popup-grid .box');
+        for (let box of selectionBoard) {
+            box.addEventListener('click', (e) => {
+                const placedShip = positionShip(e, user);
+                if (placedShip === false) return;
+                updateInstructions(user);
+                user.board.checkIfReady();
+            })
+        }
+    }
+    popupListeners();
+}
+
+function positionShip(e, user) {
+    const board = user.board;
+    const coords = getCoords(e);
+    const x = parseInt(coords[0]);
+    const y = parseInt(coords[1]);
+
+    if (!board.carrier.placed) {
+        return board.placeShip(board.carrier, x, y);
+    } else if (!board.battleship.placed) {
+        console.log('hi')
+        return board.placeShip(board.battleship, x, y);
+    } else if (!board.destroyer.placed) {
+        console.log('2')
+        return board.placeShip(board.destroyer, x, y);
+    } else if (!board.submarine.placed) {
+        return board.placeShip(board.submarine, x, y);
+    } else if (!board.patrol.placed) {
+        return board.placeShip(board.patrol, x, y);
+    }
+}
+
+function updateInstructions(user) {
+    const board = user.board;
+    const desc = document.querySelector('.popup-header p');
+    if (board.carrier.placed) desc.textContent = "Position your battleship."
+    if (board.battleship.placed) desc.textContent = "Position your destroyer."
+    if (board.destroyer.placed) desc.textContent = "Position your submarine."
+    if (board.submarine.placed) desc.textContent = "Position your patrol ship."
+    if (board.isReady) desc.textContent = "Ready for battle."
 }
 
 function userAttack(box, e, user, enemy) {
@@ -48,11 +97,9 @@ function userAttack(box, e, user, enemy) {
     const y = coords[1];
 
     user.attack(enemy, x, y);
-    renderHitOrMiss(box, enemy, x, y);
+    renderAttack(box, enemy, x, y);
 
-    if (enemy.board.fleetSunk) {
-        alert('You Win!');
-    }
+    if (enemy.board.fleetSunk) alert('You Win!');
 }
 
 function computerAttack(computer, enemy) {
@@ -60,13 +107,11 @@ function computerAttack(computer, enemy) {
     const x = coords[0];
     const y = coords[1];
 
-    const box = getBox(x, y);
+    const box = document.querySelector(`[data-id="${x}${y}"]`);
 
-    renderHitOrMiss(box, enemy, x, y);
+    renderAttack(box, enemy, x, y);
 
-    if (enemy.board.fleetSunk) {
-        alert('Computer Wins!');
-    }
+    if (enemy.board.fleetSunk) alert('Computer Wins!');
 }
 
 function getCoords(e) {
@@ -88,15 +133,15 @@ function createGrid(player, container) {
             const box = document.createElement('div');
             box.classList.add('box');
             box.setAttribute('data-id', `${x}`+ `${y}`);
+            column.appendChild(box);
 
             // temporary
             box.textContent = `${x}`+ `${y}`
-            column.appendChild(box);
         }
     }
 } 
 
-function renderHitOrMiss(box, enemy, x, y) {
+function renderAttack(box, enemy, x, y) {
     if (enemy.board.grid[x][y] === -1) {
         // Missed shot
         box.style.backgroundColor = 'gray';
@@ -104,10 +149,6 @@ function renderHitOrMiss(box, enemy, x, y) {
         // Hit ship
         box.style.backgroundColor = '';
     }
-}
-
-function getBox(x, y) {
-   return document.querySelector(`[data-id="${x}${y}"]`);
 }
 
 function renderShips(player) {
@@ -122,18 +163,18 @@ function renderShips(player) {
     }
 }
 
-function tempRenderCompShips(grid) {
-    for (let x = 0; x < grid.length; x++) {
-        for (let y = 0; y < grid.length; y++) {
-            if (grid[x][y] !== '' && grid[x][y] !== -1) {
-                const box = document.querySelector(`.computer [data-id="${x}${y}"]`);
-                box.style.backgroundColor = 'blue';
-            }
-        }
-    }
-}
+// function tempRenderCompShips(grid) {
+//     for (let x = 0; x < grid.length; x++) {
+//         for (let y = 0; y < grid.length; y++) {
+//             if (grid[x][y] !== '' && grid[x][y] !== -1) {
+//                 const box = document.querySelector(`.computer [data-id="${x}${y}"]`);
+//                 box.style.backgroundColor = 'blue';
+//             }
+//         }
+//     }
+// }
 
   
 
 
-export { renderBoards, getCoords, getBox, renderHitOrMiss, renderShips, tempRenderCompShips };
+export { renderBoards, getCoords, renderAttack, renderShips };
