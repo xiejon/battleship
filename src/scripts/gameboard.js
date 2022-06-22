@@ -30,18 +30,30 @@ const Gameboard = () => {
 
         placeShip(ship, x, y) {
             if (this.landscape === true) {
+                // Return false if ship length exceeds grid
                 if (x + ship.length > 9) return false;
+
+                // Return false if there is a ship already at location
+                for (let i = 0; i < ship.length; i++) {
+                    if (this.grid[x + i][y] !== '') return false;
+                }
+
                 for (let i = 0; i < ship.length; i++) {
                     this.grid[x + i][y] = ship;
-                    ship.placed = true;
                 }
+
             } else {
                 if (y + ship.length > 9) return false;
+
+                for (let i = 0; i < ship.length; i++) {
+                    if (this.grid[x][y + i] !== '') return false;
+                }
+
                 for (let i = 0; i < ship.length; i++) {
                     this.grid[x][y + i] = ship;
-                    ship.placed = true;
                 }
             }
+            ship.placed = true;
         },
         receiveAttack(x, y) {
             // If box was previously attacked

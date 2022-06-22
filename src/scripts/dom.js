@@ -1,5 +1,6 @@
 import { Player, ComputerPlayer } from './player.js';
 import RotateIcon from '../styles/images/rotate.svg';
+import RotateCwIcon from '../styles/images/rotate-cw.svg';
 
 function renderBoards(user, computer) {
     const userGrid = document.querySelector('.player-grid');
@@ -37,8 +38,10 @@ function displayPopup(user) {
     rotateIcon.addEventListener('click', () => {
         if (user.board.landscape) {
             user.board.landscape = false;
+            rotateIcon.src = RotateCwIcon;
         } else {
             user.board.landscape = true;
+            rotateIcon.src = RotateIcon;
         }
     })
 
@@ -51,7 +54,9 @@ function displayPopup(user) {
             box.addEventListener('click', (e) => {
                 const placedShip = positionShip(e, user);
                 if (placedShip === false) return;
+
                 updateInstructions(user);
+                renderShips(user);
                 user.board.checkIfReady();
             })
         }
@@ -68,10 +73,8 @@ function positionShip(e, user) {
     if (!board.carrier.placed) {
         return board.placeShip(board.carrier, x, y);
     } else if (!board.battleship.placed) {
-        console.log('hi')
         return board.placeShip(board.battleship, x, y);
     } else if (!board.destroyer.placed) {
-        console.log('2')
         return board.placeShip(board.destroyer, x, y);
     } else if (!board.submarine.placed) {
         return board.placeShip(board.submarine, x, y);
@@ -87,7 +90,7 @@ function updateInstructions(user) {
     if (board.battleship.placed) desc.textContent = "Position your destroyer."
     if (board.destroyer.placed) desc.textContent = "Position your submarine."
     if (board.submarine.placed) desc.textContent = "Position your patrol ship."
-    if (board.isReady) desc.textContent = "Ready for battle."
+    if (board.patrol.placed) desc.textContent = "Ready for battle."
 }
 
 function userAttack(box, e, user, enemy) {
