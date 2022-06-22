@@ -1,9 +1,5 @@
 import { Ship } from "./ship.js";
 
-// '' = empty square
-// -1 = missed attack
-// 1 = ship hit
-
 const Gameboard = () => {
     const grid = createGrid(10);
     let landscape = true;
@@ -32,7 +28,7 @@ const Gameboard = () => {
             if (this.landscape === true) {
                 // Return false if ship length exceeds grid
                 if (x + ship.length > 9) return false;
-
+                
                 // Return false if there is a ship already at location
                 for (let i = 0; i < ship.length; i++) {
                     if (this.grid[x + i][y] !== '') return false;
@@ -41,7 +37,6 @@ const Gameboard = () => {
                 for (let i = 0; i < ship.length; i++) {
                     this.grid[x + i][y] = ship;
                 }
-
             } else {
                 if (y + ship.length > 9) return false;
 

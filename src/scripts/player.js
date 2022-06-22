@@ -59,6 +59,31 @@ class ComputerPlayer extends Player {
     getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+    placeShipsRandom() {
+        const randomizeOrientation = () => {
+            const randomInt = this.getRandomInt(0, 1);
+            this.board.landscape = randomInt === 0 ? true : false;
+        }
+        const placeRandomShip = ship => {
+            randomizeOrientation();
+            let x = this.getRandomInt(0, 9);
+            let y = this.getRandomInt(0, 9);
+            let randomShip = this.board.placeShip(ship, x, y);
+
+            while (randomShip === false) {
+                randomizeOrientation();
+                const randomInt = this.getRandomInt(0, 1);
+                x = this.getRandomInt(0, 9);
+                y = this.getRandomInt(0, 9);
+                randomShip = this.board.placeShip(ship, x, y);
+            }
+        }
+        placeRandomShip(this.board.carrier);
+        placeRandomShip(this.board.battleship);
+        placeRandomShip(this.board.destroyer);
+        placeRandomShip(this.board.submarine);
+        placeRandomShip(this.board.patrol);
+    }
 }
 
 export { Player, ComputerPlayer };

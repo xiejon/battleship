@@ -9,30 +9,10 @@ const Game = () => {
             user.turn = true;
 
             renderBoards(user, computer);
-
-            // // temp
-            // this.positionShips(user);
-            // this.positionShips(computer);
-
             renderShips(user);
 
-            // // temp
-            // tempRenderCompShips(computer.board.grid);
-
+            computer.placeShipsRandom();
         },
-
-
-
-        // // Temporary
-        // positionShips(player) {
-        //     player.board.placeShip(player.board.carrier, 1, 0);
-        //     player.board.placeShip(player.board.battleship, 3, 3);
-        //     player.board.placeShip(player.board.destroyer, 5, 5);
-        //     player.board.placeShip(player.board.submarine, 6, 9);
-        //     player.board.placeShip(player.board.patrol, 3, 8);
-
-        //     player.board.checkIfReady();
-        // }
     }
 }
 

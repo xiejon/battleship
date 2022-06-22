@@ -1,4 +1,3 @@
-import { Player, ComputerPlayer } from './player.js';
 import RotateIcon from '../styles/images/rotate.svg';
 import RotateCwIcon from '../styles/images/rotate-cw.svg';
 
@@ -114,7 +113,7 @@ function showShip(e, user) {
                 if (x + i > 9) return;  // Prevents query selector from returning null
                 const box = document.querySelector(`[data-id="${x + i}${y}"]`)
                 if (box.hasAttribute('ship-present')) return;   // Do not highlight if there is a ship at the square
-                box.style.backgroundColor = (x + ship.length > 10) ? 'red' : 'gray';
+                box.style.backgroundColor = (x + ship.length > 10) ? '#8B0000' : '#7A6440';
                 box.setAttribute('highlighted', '');
             }
         } else {
@@ -122,7 +121,7 @@ function showShip(e, user) {
                 if (y + i > 9) return;
                 const box = document.querySelector(`[data-id="${x}${y + i}"]`)
                 if (box.hasAttribute('ship-present')) return;
-                box.style.backgroundColor = (y + ship.length > 10) ? 'red' : 'gray';
+                box.style.backgroundColor = (y + ship.length > 10) ? '#8B0000' : '#7A6440';
                 box.setAttribute('highlighted', '');
             }
         }
@@ -202,9 +201,6 @@ function createGrid(player, container) {
             box.classList.add('box');
             box.setAttribute('data-id', `${x}`+ `${y}`);
             column.appendChild(box);
-
-            // temporary
-            box.textContent = `${x}`+ `${y}`
         }
     }
 } 
@@ -212,10 +208,10 @@ function createGrid(player, container) {
 function renderAttack(box, enemy, x, y) {
     if (enemy.board.grid[x][y] === -1) {
         // Missed shot
-        box.style.backgroundColor = 'gray';
+        box.style.backgroundColor = '#7A6440';
     } else {
         // Hit ship
-        box.style.backgroundColor = '';
+        box.style.backgroundColor = '#8B0000';
     }
 }
 
@@ -225,7 +221,7 @@ function renderShips(player, gridContainer) {
         for (let y = 0; y < grid.length; y++) {
             if (grid[x][y] !== '' && grid[x][y] !== -1) {
                 const box = gridContainer.querySelector(`[data-id="${x}${y}"]`);
-                box.style.backgroundColor = 'blue';
+                box.style.backgroundColor = '#005CAD';
 
                 // Remove 'highlighted' data attribute
                 box.removeAttribute('highlighted');

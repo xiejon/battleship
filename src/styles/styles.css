@@ -13,11 +13,14 @@
     src: url(./fonts/Noto_Sans/NotoSans-Bold.ttf);
     weight: 800;
 }
+@font-face {
+    font-family: Stick-No-Bills;
+    src: url(./fonts/Stick_No_Bills/static/StickNoBills-SemiBold.ttf);
+}
 
 * {
     margin: 0;
     padding: 0;
-    font-family: "Noto-Sans";
 }
 
 .container {
@@ -25,20 +28,26 @@
     width: 100vw;
     display: flex;
     flex-direction: column;
+    background-color: #002647;
 }
 
 .header {
-    height: 10%;
+    height: 20%;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid red;
+}
+.header h1 {
+    padding-top: 20px;
+    font-family: "Stick-No-Bills";
+    font-size: 120px;
+    color: #8FADC7;
 }
 
 .main {
+    font-family: "Stick-No-Bills";
     height: 80%;
     display: flex;
-    border: 1px solid green;
 }
 
 /* Initial popup before game start */
@@ -63,9 +72,11 @@
     position: absolute;
     left: 25%;
     top: 10%;
-    background-color: white;
+    background-color: #002647;
     z-index: 999;
     border-radius: 10px;
+    font-family: "Noto-Sans";
+    color: #8FADC7;
 }
 h2 {
     font-size:30px;
@@ -83,11 +94,21 @@ h2 {
 
 .player, 
 .computer {
+    min-height: 650px;
+    min-width: 500px;
     width: 50%;
-    border: 1px solid orange;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
+}
+.player h4, 
+.computer h4 {
+    position: absolute;
+    top: 0;
+    font-size: 50px;
+    color: #8FADC7;
 }
 
 /* get columns lined up */
@@ -98,6 +119,8 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: absolute;
+    top: 120px;
 }
 
 /* get boxes within column correctly positioned */
@@ -109,12 +132,12 @@ h2 {
 .popup-grid .box,
 .player-grid .box, 
 .computer-grid .box {
-    height: 40px; 
-    width: 40px; 
-    border: 1px solid black;
+    height: 45px; 
+    width: 45px; 
+    background-color: #8FADC7;;
+    border: 1px solid #64798c;
 }
 
 .footer {
     height: 10%;
-    border: 1px solid blue;
 }
