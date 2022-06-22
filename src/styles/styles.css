@@ -29,6 +29,7 @@
     display: flex;
     flex-direction: column;
     background-color: #002647;
+    color: #8FADC7;
 }
 
 .header {
@@ -41,7 +42,6 @@
     padding-top: 20px;
     font-family: "Stick-No-Bills";
     font-size: 120px;
-    color: #8FADC7;
 }
 
 .main {
@@ -62,34 +62,52 @@
     opacity: 0.4;
 }
 .popup {
-    height: 700px;
-    min-width: 500px;
+    height: 780px;
+    min-width: 530px;
     width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 20px;
     position: absolute;
     left: 25%;
-    top: 10%;
+    top: 5%;
     background-color: #002647;
     z-index: 999;
     border-radius: 10px;
     font-family: "Noto-Sans";
-    color: #8FADC7;
 }
 h2 {
-    font-size:30px;
+    font-size: 50px;
+}
+.popup-header p {
+    font-size: 25px;
 }
 .popup-header {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }
 .popup-grid {
     display: flex;
 }
 .popup-header img {
+    padding: 20px 0px 5px 0px;
+    height: 45px;
+}
+/* 'Start Game' button */
+.start {
     height: 40px;
+    width: 300px;
+    background-color: #8FADC7;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Noto-Sans';
+    font-size: 25px;
+    color: #002647;
 }
 
 .player, 
@@ -108,7 +126,6 @@ h2 {
     position: absolute;
     top: 0;
     font-size: 50px;
-    color: #8FADC7;
 }
 
 /* get columns lined up */

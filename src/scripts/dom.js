@@ -68,6 +68,7 @@ function displayPopup(user) {
         })
 
         startBtn.addEventListener('click', () => {
+            if (!user.board.isReady) throw new Error('Error: Please place all your ships before continuing.')
             hidePopup();
             createGrid(user, userGrid);
             renderShips(user, userGrid);
