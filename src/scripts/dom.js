@@ -3,7 +3,6 @@ import RotateIcon from '../styles/images/rotate.svg';
 import RotateCwIcon from '../styles/images/rotate-cw.svg';
 
 function renderBoards(user, computer) {
-    const userGrid = document.querySelector('.player-grid');
     const computerGrid = document.querySelector('.computer-grid');
 
     const boardListeners = () => {
@@ -28,46 +27,59 @@ function renderBoards(user, computer) {
 }
 
 function displayPopup(user) {
+    const bg = document.querySelector('.background')
+    const popup = document.querySelector('.popup')
     const popupHeader = document.querySelector('.popup-header');
-    const selectionGrid = document.querySelector('.popup-grid');
+    const popupGrid = document.querySelector('.popup-grid');
+    const startBtn = document.querySelector('.start');
+    const userGrid = document.querySelector('.player-grid');
 
     // Button to rotate ship
     const rotateIcon = new Image();
     rotateIcon.src = RotateIcon;
     popupHeader.append(rotateIcon);
-    rotateIcon.addEventListener('click', () => {
-        if (user.board.landscape) {
-            user.board.landscape = false;
-            rotateIcon.src = RotateCwIcon;
-        } else {
-            user.board.landscape = true;
-            rotateIcon.src = RotateIcon;
-        }
-    })
 
-    // Grid to place ships
-    createGrid(user, selectionGrid);
+    createGrid(user, popupGrid);
 
-    // Event listeners
     const popupListeners = () => {
-        const selectionBoard = document.querySelectorAll('.popup-grid .box');
-        for (let box of selectionBoard) {
+        const popupBoard = document.querySelectorAll('.popup-grid .box');
+
+        for (let box of popupBoard) {
             box.addEventListener('mouseover', e => {
-
-                showShip(e, user);
+                showShip(e, user);  // Show outline of ship on mouse hover
             })
-            box.addEventListener('click', e => {
-                const placedShip = positionShip(e, user);
-                if (placedShip === false) return;
 
-                // Remove 'highlighted' data attribute
-                box.removeAttribute('highlighted');
-                updateInstructions(user);
-                renderShips(user);
+            box.addEventListener('click', e => {
+                const placedShip = positionShip(e, user);   // Place ship at selected location
+                if (placedShip === false) return;
+                updateInstructions(user);   // Update popup description 
+                renderShips(user, popupGrid);
                 user.board.checkIfReady();
             })
         }
+
+        rotateIcon.addEventListener('click', () => {
+            if (user.board.landscape) {
+                user.board.landscape = false;
+                rotateIcon.src = RotateCwIcon;
+            } else {
+                user.board.landscape = true;
+                rotateIcon.src = RotateIcon;
+            }
+        })
+
+        startBtn.addEventListener('click', () => {
+            hidePopup();
+            createGrid(user, userGrid);
+            renderShips(user, userGrid);
+        })
     }
+
+    function hidePopup() {
+        bg.style.display = 'none';
+        popup.style.display = 'none';
+    }
+
     popupListeners();
 }
 
@@ -99,8 +111,9 @@ function showShip(e, user) {
 
         if (board.landscape) {
             for (let i = 0; i < ship.length; i++) {
-                if (x + i > 9) return;
+                if (x + i > 9) return;  // Prevents query selector from returning null
                 const box = document.querySelector(`[data-id="${x + i}${y}"]`)
+                if (box.hasAttribute('ship-present')) return;   // Do not highlight if there is a ship at the square
                 box.style.backgroundColor = (x + ship.length > 10) ? 'red' : 'gray';
                 box.setAttribute('highlighted', '');
             }
@@ -108,6 +121,7 @@ function showShip(e, user) {
             for (let i = 0; i < ship.length; i++) {
                 if (y + i > 9) return;
                 const box = document.querySelector(`[data-id="${x}${y + i}"]`)
+                if (box.hasAttribute('ship-present')) return;
                 box.style.backgroundColor = (y + ship.length > 10) ? 'red' : 'gray';
                 box.setAttribute('highlighted', '');
             }
@@ -161,7 +175,7 @@ function computerAttack(computer, enemy) {
     const x = coords[0];
     const y = coords[1];
 
-    const box = document.querySelector(`[data-id="${x}${y}"]`);
+    const box = document.querySelector(`.player-grid [data-id="${x}${y}"]`);
 
     renderAttack(box, enemy, x, y);
 
@@ -205,30 +219,23 @@ function renderAttack(box, enemy, x, y) {
     }
 }
 
-function renderShips(player) {
+function renderShips(player, gridContainer) {
     const grid = player.board.grid;
     for (let x = 0; x < grid.length; x++) {
         for (let y = 0; y < grid.length; y++) {
             if (grid[x][y] !== '' && grid[x][y] !== -1) {
-                const box = document.querySelector(`[data-id="${x}${y}"]`);
+                const box = gridContainer.querySelector(`[data-id="${x}${y}"]`);
                 box.style.backgroundColor = 'blue';
+
+                // Remove 'highlighted' data attribute
+                box.removeAttribute('highlighted');
+
+                // Add 'ship' data attribute
+                box.setAttribute('ship-present', '');
             }
         }
     }
 }
-
-// function tempRenderCompShips(grid) {
-//     for (let x = 0; x < grid.length; x++) {
-//         for (let y = 0; y < grid.length; y++) {
-//             if (grid[x][y] !== '' && grid[x][y] !== -1) {
-//                 const box = document.querySelector(`.computer [data-id="${x}${y}"]`);
-//                 box.style.backgroundColor = 'blue';
-//             }
-//         }
-//     }
-// }
-
-  
 
 
 export { renderBoards, getCoords, renderAttack, renderShips };
