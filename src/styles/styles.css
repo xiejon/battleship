@@ -24,6 +24,18 @@
     border: 1px solid green;
 }
 
+.popup {
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 500px;
+}
+
+.popup-grid {
+    display: flex;
+}
+
 .player, 
 .computer {
     width: 50%;
@@ -46,6 +58,7 @@
     flex-direction: column-reverse;
 }
 
+.popup-grid div,
 .player-grid div, 
 .computer-grid div {
     height: 20px; 

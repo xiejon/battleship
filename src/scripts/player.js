@@ -19,6 +19,7 @@ class Player {
         if (enemyPlayer.board.grid[x][y] === -1) throw new Error('Error: Invalid set of coordinates.');
         if (this.turn) {
             enemyPlayer.board.receiveAttack(x, y);
+            enemyPlayer.board.checkFleet();
             this.swapTurns(enemyPlayer);
         }
     }
@@ -38,6 +39,7 @@ class ComputerPlayer extends Player {
         enemyBoard.receiveAttack(x, y);
         this.attackedCoords[`${x}${y}`] = 0;
 
+        enemyPlayer.board.checkFleet();
         this.swapTurns(enemyPlayer);
 
         return coords;

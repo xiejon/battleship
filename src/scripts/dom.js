@@ -1,13 +1,72 @@
 import { Player, ComputerPlayer } from './player.js';
+import RotateIcon from '../styles/images/rotate.svg';
 
 function renderBoards(user, computer) {
+
+    const popup = () => {
+        const popupHeader = document.querySelector('.popup-header');
+        const selectionGrid = document.querySelector('.popup-grid');
+
+        const rotateIcon = new Image();
+        rotateIcon.src = RotateIcon;
+        popupHeader.append(rotateIcon);
+
+        createGrid(user, selectionGrid);
+    }
+
+    const boardListeners = () => {
+        const computerBoard = document.querySelectorAll('.computer .box');
+        
+        for (let box of computerBoard) {
+            box.addEventListener('click', e => {
+                if (!user.turn || e.target.getAttribute('clicked') === 'true') return;
+
+                userAttack(box, e, user, computer);
+                // Prevent square from being clicked twice
+                e.target.setAttribute('clicked', 'true');
+
+                // Computer attacks back
+                computerAttack(computer, user);
+            });
+        }
+    }
+
+    popup();
+
     const userGrid = document.querySelector('.player-grid');
     const computerGrid = document.querySelector('.computer-grid');
 
-    createBoxes(user, userGrid);
-    createBoxes(computer, computerGrid);
+    createGrid(computer, computerGrid);
 
-    const playerBoard = document.querySelectorAll('.player .box');
+    boardListeners();
+}
+
+function userAttack(box, e, user, enemy) {
+    // Get coordinates of chosen attack site
+    const coords = getCoords(e);
+    const x = coords[0];
+    const y = coords[1];
+
+    user.attack(enemy, x, y);
+    renderHitOrMiss(box, enemy, x, y);
+
+    if (enemy.board.fleetSunk) {
+        alert('You Win!');
+    }
+}
+
+function computerAttack(computer, enemy) {
+    const coords = computer.randomAttack(enemy);
+    const x = coords[0];
+    const y = coords[1];
+
+    const box = getBox(x, y);
+
+    renderHitOrMiss(box, enemy, x, y);
+
+    if (enemy.board.fleetSunk) {
+        alert('Computer Wins!');
+    }
 }
 
 function getCoords(e) {
@@ -17,7 +76,7 @@ function getCoords(e) {
     return [x, y];
 }
 
-function createBoxes(player, container) {
+function createGrid(player, container) {
     for (let x = 0; x < player.board.grid.length; x++) {
         // Create columns to insert boxes into (to help with positioning)
         const column = document.createElement('div');
