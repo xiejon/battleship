@@ -48,13 +48,20 @@ function displayPopup(user) {
     // Grid to place ships
     createGrid(user, selectionGrid);
 
+    // Event listeners
     const popupListeners = () => {
         const selectionBoard = document.querySelectorAll('.popup-grid .box');
         for (let box of selectionBoard) {
-            box.addEventListener('click', (e) => {
+            box.addEventListener('mouseover', e => {
+
+                showShip(e, user);
+            })
+            box.addEventListener('click', e => {
                 const placedShip = positionShip(e, user);
                 if (placedShip === false) return;
 
+                // Remove 'highlighted' data attribute
+                box.removeAttribute('highlighted');
                 updateInstructions(user);
                 renderShips(user);
                 user.board.checkIfReady();
@@ -62,6 +69,50 @@ function displayPopup(user) {
         }
     }
     popupListeners();
+}
+
+function showShip(e, user) {
+    const board = user.board;
+    if (!board.carrier.placed) {
+        highlightBoxes(board.carrier);
+    } else if (!board.battleship.placed) {
+        highlightBoxes(board.battleship);
+    } else if (!board.destroyer.placed) {
+        highlightBoxes(board.destroyer);
+    } else if (!board.submarine.placed) {
+        highlightBoxes(board.submarine);
+    } else if (!board.patrol.placed) {
+        highlightBoxes(board.patrol);
+    }
+
+    // Highlight squares on mouse hover
+    function highlightBoxes(ship) {
+        const grid = document.querySelectorAll('.popup .box')
+        const coords = getCoords(e);
+        const x = parseInt(coords[0]);
+        const y = parseInt(coords[1]);
+
+        // Remove previously highlighted squares
+        for (let box of grid) {
+            if (box.hasAttribute('highlighted')) box.style.backgroundColor = '';
+        }
+
+        if (board.landscape) {
+            for (let i = 0; i < ship.length; i++) {
+                if (x + i > 9) return;
+                const box = document.querySelector(`[data-id="${x + i}${y}"]`)
+                box.style.backgroundColor = (x + ship.length > 10) ? 'red' : 'gray';
+                box.setAttribute('highlighted', '');
+            }
+        } else {
+            for (let i = 0; i < ship.length; i++) {
+                if (y + i > 9) return;
+                const box = document.querySelector(`[data-id="${x}${y + i}"]`)
+                box.style.backgroundColor = (y + ship.length > 10) ? 'red' : 'gray';
+                box.setAttribute('highlighted', '');
+            }
+        }
+    }
 }
 
 function positionShip(e, user) {
