@@ -5,30 +5,15 @@ const Game = () => {
     const user = new Player();
     const computer = new ComputerPlayer();
     return {
+        user,
+        computer,
         startGame() {
             user.turn = true;
-
-            renderBoards(user, computer);
-            renderShips(user);
-
             computer.placeShipsRandom();
         },
     }
 }
 
-function resetGame() {
-    const columns = document.querySelectorAll('.column');
-    const boxes = document.querySelectorAll('.box');
+const game = Game();
 
-    for (let box of boxes) {
-        box.remove();
-    }
-    for (let column of columns) {
-        column.remove();
-    }
-
-    const newGame = Game();
-    newGame.startGame();
-}
-
-export { Game };
+export { game };

@@ -1,86 +1,95 @@
 import RotateIcon from '../styles/images/rotate.svg';
 import RotateCwIcon from '../styles/images/rotate-cw.svg';
+import { game } from './game.js'
 
 function renderBoards(user, computer) {
     const computerGrid = document.querySelector('.computer-grid');
-
-    const boardListeners = () => {
-        const computerBoard = document.querySelectorAll('.computer .box');
-        for (let box of computerBoard) {
-            box.addEventListener('click', e => {
-                if (!user.turn || e.target.getAttribute('clicked') === 'true') return;
-
-                userAttack(box, e, user, computer);
-                // Prevent square from being clicked twice
-                e.target.setAttribute('clicked', 'true');
-
-                // Computer attacks back
-                computerAttack(computer, user);
-            });
-        }
-    }
-
-    displayPopup(user);
-    createGrid(computer, computerGrid);
-    boardListeners();
-}
-
-function displayPopup(user) {
-    const bg = document.querySelector('.background')
-    const popup = document.querySelector('.popup')
-    const popupHeader = document.querySelector('.popup-header');
     const popupGrid = document.querySelector('.popup-grid');
-    const startBtn = document.querySelector('.start');
     const userGrid = document.querySelector('.player-grid');
 
-    // Button to rotate ship
-    const rotateIcon = new Image();
-    rotateIcon.src = RotateIcon;
-    popupHeader.append(rotateIcon);
+    togglePopup();
+    renderGameboard(popupGrid);
+    renderGameboard(computerGrid);
+    renderGameboard(userGrid);
+    attachBoardListeners(user, computer);
+}
 
-    createGrid(user, popupGrid);
+function attachBoardListeners(user, computer) {
+    const computerBoard = document.querySelectorAll('.computer .box');
 
-    const popupListeners = () => {
-        const popupBoard = document.querySelectorAll('.popup-grid .box');
+    for (let box of computerBoard) {
+        box.addEventListener('click', e => {
+            if (!user.turn || e.target.getAttribute('clicked') === 'true') return;
 
-        for (let box of popupBoard) {
-            box.addEventListener('mouseover', e => {
-                showShip(e, user);  // Show outline of ship on mouse hover
-            })
-
-            box.addEventListener('click', e => {
-                const placedShip = positionShip(e, user);   // Place ship at selected location
-                if (placedShip === false) return;
-                updateInstructions(user);   // Update popup description 
-                renderShips(user, popupGrid);
-                user.board.checkIfReady();
-            })
-        }
-
-        rotateIcon.addEventListener('click', () => {
-            if (user.board.landscape) {
-                user.board.landscape = false;
-                rotateIcon.src = RotateCwIcon;
-            } else {
-                user.board.landscape = true;
-                rotateIcon.src = RotateIcon;
+            userAttack(box, e, user, computer);
+            if (computer.board.fleetSunk) {
+                alert('You Win!');
+                resetBoard(user, computer);
+                return;
             }
+
+            computerAttack(computer, user); 
+            if (user.board.fleetSunk) {
+                alert('Computer Wins!');
+                resetBoard(user, computer);
+            }
+
+        });
+    }
+}
+
+function attachPopupListeners() {
+    const startBtn = document.querySelector('.start');
+    const userGrid = document.querySelector('.player-grid');
+    const rotateIcon = document.querySelector('.popup-header img');
+    const popupGrid = document.querySelector('.popup-grid');
+    const popupBoard = document.querySelectorAll('.popup-grid .box');
+
+    for (let box of popupBoard) {
+        box.addEventListener('mouseover', e => {
+            showShip(e, game.user);  // Show outline of ship on mouse hover
         })
 
-        startBtn.addEventListener('click', () => {
-            if (!user.board.isReady) throw new Error('Error: Please place all your ships before continuing.')
-            hidePopup();
-            createGrid(user, userGrid);
-            renderShips(user, userGrid);
+        box.addEventListener('click', e => {
+            const placedShip = positionShip(e, game.user);   // Place ship at selected location
+            if (placedShip === false) return;
+            updateInstructions(game.user);   // Update popup description 
+            renderShips(game.user, popupGrid);
+            game.user.board.checkIfReady();
         })
     }
 
-    function hidePopup() {
+    rotateIcon.addEventListener('click', () => {
+        if (game.user.board.landscape) {
+            game.user.board.landscape = false;
+            rotateIcon.src = RotateCwIcon;
+        } else {
+            game.user.board.landscape = true;
+            rotateIcon.src = RotateIcon;
+        }
+    })
+
+    startBtn.addEventListener('click', () => {
+        if (!game.user.board.isReady) throw new Error('Error: Please place all your ships before continuing.')
+        
+        togglePopup();
+        renderShips(game.user, userGrid);
+    })
+
+}
+
+function togglePopup() {
+    const bg = document.querySelector('.background')
+    const popup = document.querySelector('.popup')
+    if (bg.style.display === 'flex' && popup.style.display === 'flex') {
+        // Hide
         bg.style.display = 'none';
         popup.style.display = 'none';
+    } else {
+        // Show
+        bg.style.display = 'flex';
+        popup.style.display = 'flex';
     }
-
-    popupListeners();
 }
 
 function showShip(e, user) {
@@ -114,7 +123,7 @@ function showShip(e, user) {
                 if (x + i > 9) return;  // Prevents query selector from returning null
                 const box = document.querySelector(`[data-id="${x + i}${y}"]`)
                 if (box.hasAttribute('ship-present')) return;   // Do not highlight if there is a ship at the square
-                box.style.backgroundColor = (x + ship.length > 10) ? '#8B0000' : '#5C4033';
+                box.style.backgroundColor = (x + ship.length > 10) ? '#8B0000' : '#483C32';
                 box.setAttribute('highlighted', '');
             }
         } else {
@@ -122,7 +131,7 @@ function showShip(e, user) {
                 if (y + i > 9) return;
                 const box = document.querySelector(`[data-id="${x}${y + i}"]`)
                 if (box.hasAttribute('ship-present')) return;
-                box.style.backgroundColor = (y + ship.length > 10) ? '#8B0000' : '#5C4033';
+                box.style.backgroundColor = (y + ship.length > 10) ? '#8B0000' : '#483C32';
                 box.setAttribute('highlighted', '');
             }
         }
@@ -167,7 +176,7 @@ function userAttack(box, e, user, enemy) {
     user.attack(enemy, x, y);
     renderAttack(box, enemy, x, y);
 
-    if (enemy.board.fleetSunk) alert('You Win!');
+    e.target.setAttribute('clicked', 'true');    // Prevent square from being clicked twice
 }
 
 function computerAttack(computer, enemy) {
@@ -178,8 +187,23 @@ function computerAttack(computer, enemy) {
     const box = document.querySelector(`.player-grid [data-id="${x}${y}"]`);
 
     renderAttack(box, enemy, x, y);
+}
 
-    if (enemy.board.fleetSunk) alert('Computer Wins!');
+function resetBoard(user, computer) {
+    const boxes = document.querySelectorAll('.box');
+
+    for (let box of boxes) {
+        box.style.backgroundColor = '';
+        box.removeAttribute('ship-present');
+        box.removeAttribute('highlighted');
+        box.removeAttribute('clicked');
+    }
+
+    computer.computerReset();
+    user.reset();
+    togglePopup();
+    updateInstructions(user);
+    game.startGame();
 }
 
 function getCoords(e) {
@@ -189,15 +213,15 @@ function getCoords(e) {
     return [x, y];
 }
 
-function createGrid(player, container) {
-    for (let x = 0; x < player.board.grid.length; x++) {
+function renderGameboard(container) {
+    for (let x = 0; x < 10; x++) {
         // Create columns to insert boxes into (to help with positioning)
         const column = document.createElement('div');
         column.classList.add(`column`);
         column.setAttribute('id', `${x}`)
         container.appendChild(column);
 
-        for (let y = 0; y < player.board.grid.length; y++) {
+        for (let y = 0; y < 10; y++) {
             const box = document.createElement('div');
             box.classList.add('box');
             box.setAttribute('data-id', `${x}`+ `${y}`);
@@ -209,7 +233,7 @@ function createGrid(player, container) {
 function renderAttack(box, enemy, x, y) {
     if (enemy.board.grid[x][y] === -1) {
         // Missed shot
-        box.style.backgroundColor = '#5C4033';
+        box.style.backgroundColor = '#483C32';
     } else {
         // Hit ship
         box.style.backgroundColor = '#8B0000';
@@ -227,11 +251,20 @@ function renderShips(player, gridContainer) {
                 // Remove 'highlighted' data attribute
                 box.removeAttribute('highlighted');
 
-                // Add 'ship' data attribute
+                // Add 'ship-present' data attribute to prevent futher highlighting
                 box.setAttribute('ship-present', '');
             }
         }
     }
+}
+
+function renderRotateIcon() {
+    const popupHeader = document.querySelector('.popup-header');
+
+    // Button to change ship orientation
+    const rotateIcon = new Image();
+    rotateIcon.src = RotateIcon;
+    popupHeader.append(rotateIcon);
 }
 
 function renderGithubIcon() {
@@ -251,7 +284,9 @@ function renderGithubIcon() {
     iconSvg.appendChild(iconPath);
     footer.append(a)
 }
+
+renderRotateIcon();
 renderGithubIcon();
 
 
-export { renderBoards, getCoords, renderAttack, renderShips };
+export { renderBoards, getCoords, renderAttack, renderShips, attachPopupListeners };

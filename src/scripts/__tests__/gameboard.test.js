@@ -45,9 +45,9 @@ describe('board correctly receives attacks', () => {
     });
 
     test('ship at another position', () => {
-        board.placeShip(board.patrol, 1, 5);
-        board.receiveAttack(1, 5);
-        board.receiveAttack(2, 5);  
+        board.placeShip(board.patrol, 1, 6);
+        board.receiveAttack(1, 6);
+        board.receiveAttack(2, 6);  
         expect(board.patrol.hits).toBe(2);
     });
 

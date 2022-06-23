@@ -60,7 +60,8 @@
     align-items: center;
     justify-content: center;
     background-color: black;
-    opacity: 0.4;
+    opacity: 0.5;
+    z-index: 99;
 }
 
 .popup {
@@ -194,6 +195,7 @@ h2 {
 .computer .box:hover {
     cursor: crosshair;
 }
+
 .popup-header img:hover, 
 .start:hover {
     cursor: pointer;

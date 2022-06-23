@@ -1,7 +1,7 @@
 import './styles/styles.css';
-import { Game } from './scripts/game.js';
+import { game } from './scripts/game.js';
+import { attachPopupListeners, renderBoards } from './scripts/dom.js';
 
-
-const game = Game();
 game.startGame();
-
+renderBoards(game.user, game.computer);
+attachPopupListeners();

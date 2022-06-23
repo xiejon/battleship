@@ -23,6 +23,15 @@ class Player {
             this.swapTurns(enemyPlayer);
         }
     }
+    reset() {
+        for (let col = 0; col < this.board.grid.length; col++) {
+            for (let row = 0; row < this.board.grid.length; row++) {
+                this.board.grid[col][row] = '';
+            }
+        }
+        this.turn = false;
+        this.board.clearBoard();
+    }
 }
 
 class ComputerPlayer extends Player {
@@ -83,6 +92,10 @@ class ComputerPlayer extends Player {
         placeRandomShip(this.board.destroyer);
         placeRandomShip(this.board.submarine);
         placeRandomShip(this.board.patrol);
+    }
+    computerReset() {
+        this.reset();
+        this.attackedCoords = {};
     }
 }
 

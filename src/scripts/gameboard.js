@@ -1,7 +1,7 @@
 import { Ship } from "./ship.js";
 
 const Gameboard = () => {
-    const grid = createGrid(10);
+    let grid = createGrid(10);
     let landscape = true;
     let fleetSunk = false;
     let isReady = false;
@@ -28,7 +28,7 @@ const Gameboard = () => {
             if (this.landscape === true) {
                 // Return false if ship length exceeds grid
                 if (x + ship.length > 9) return false;
-                
+
                 // Return false if there is a ship already at location
                 for (let i = 0; i < ship.length; i++) {
                     if (this.grid[x + i][y] !== '') return false;
@@ -84,6 +84,27 @@ const Gameboard = () => {
                 } else {
                     this.isReady = true;
                 }
+        },
+        clearBoard() {
+            for (let col = 0; col < this.grid.length; col++) {
+                for (let row = 0; row < this.grid.length; row++) {
+                    this.grid[col][row] = '';
+                }
+            }
+            this.fleetSunk = false;
+            this.isReady = false;
+
+            this.carrier.placed = false;
+            this.battleship.placed = false;
+            this.destroyer.placed = false;
+            this.submarine.placed = false;
+            this.patrol.placed = false;
+
+            this.carrier.sunk = false;
+            this.battleship.sunk = false;
+            this.destroyer.sunk = false;
+            this.submarine.sunk = false;
+            this.patrol.sunk = false;
         }
     }
 }
