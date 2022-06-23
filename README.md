@@ -8,7 +8,7 @@ Viewable at https://xiejon.github.io/battleship/
 
 ## Objectives 
 
-1. Practice unit-testing, mocking using Jest.
+1. Practice unit-testing & mocking using Jest.
 2. Use Test Driven Development to improve quality and effectiveness of code. 
 3. Create a simple AI for the user to play against.
 
