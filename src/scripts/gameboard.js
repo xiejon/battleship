@@ -27,7 +27,7 @@ const Gameboard = () => {
     placeShip(ship, x, y) {
       if (this.landscape === true) {
         // Return false if ship length exceeds grid
-        if (x + ship.length > 9) return false;
+        if (x + ship.length > 10) return false;
 
         // Return false if there is a ship already at location
         for (let i = 0; i < ship.length; i++) {
@@ -38,7 +38,7 @@ const Gameboard = () => {
           this.grid[x + i][y] = ship;
         }
       } else {
-        if (y + ship.length > 9) return false;
+        if (y + ship.length > 10) return false;
 
         for (let i = 0; i < ship.length; i++) {
           if (this.grid[x][y + i] !== '') return false;
